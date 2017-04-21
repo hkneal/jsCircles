@@ -18,10 +18,13 @@
 	<svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg>
 
 	<script>
+	var increase_r = 0;
+	var numOfCircles = 0;
 	function Circle(cx, cy, html_id)
 	{
 		var html_id = html_id;
-		this.info = { cx: cx,  cy: cy };
+		r=0;
+		this.info = { cx: cx,  cy: cy, r };
 
 		//private function that generates a random number
 		var randomNumberBetween = function(min, max){
@@ -37,31 +40,59 @@
 
 			//create a circle
 			var colorVaries = Math.ceil(randomNumberBetween(0,5)) - 1;
-			var sizeVaries = Math.ceil(randomNumberBetween(0,5)) - 1;
+			this.info.r = Math.ceil(randomNumberBetween(2,35));
 			var styleArr = ["fill: black","fill: green","fill: blue","fill: red","fill: yellow"];
-			var sizeArr = [10, 5, 25, 50, 15];
+			// var sizeArr = [10, 5, 25, 50, 15];
 			var circle = makeSVG('circle',
 				{ 	cx: this.info.cx,
 				  	cy: this.info.cy,
-						r: sizeArr[colorVaries],
+						r: this.info.r,
 				  	id: html_id,
-						style: styleArr[sizeVaries]
+						style: styleArr[colorVaries]
 						// r:  10,
 				  	// style: "fill: blue"
+						// r: sizeArr[colorVaries],
 				});
-
 			document.getElementById('svg').appendChild(circle);
+		}
+
+		this.adjustSize = function()
+		{
+			var list = document.getElementById('svg');
+			function getTime(){
+				var date = new Date();
+				return date.getTime();
+			}
+
+			document.onmousedown = function(e){
+				mousedown_time = getTime();
+				console.log(mousedown_time);
+			}
+
+			document.onmouseup = function(e){
+				time_pressed = getTime() - mousedown_time;
+				console.log(time_pressed);
+				console.log('You held your mouse down for', time_pressed, 'miliseconds.');
+				increase_r = Math.trunc(time_pressed/100);
+				console.log("increased the radius by " + increase_r);
+			}
+			console.log("numOfCircles=" + numOfCircles);
+			for(var i=0; i<numOfCircles; i++)
+			{
+				list.getElementById(i).r.baseVal.value += increase_r;
+			}
+			increase_r = 0;
 		}
 
 		this.update = function(time){
 			var el = document.getElementById(html_id);
 
 			//see if the circle is going outside the browser. if it is, reverse the velocity
-			if( this.info.cx > document.body.clientWidth-10 || this.info.cx < 0)
+			if( this.info.cx + this.info.r > document.body.clientWidth || this.info.cx < 0)
 			{
 				this.info.velocity.x = this.info.velocity.x * -1;
 			}
-			if( this.info.cy > document.body.clientHeight-10 || this.info.cy < 0)
+			if( this.info.cy + this.info.r > document.body.clientHeight || this.info.cy < 0)
 			{
 				this.info.velocity.y = this.info.velocity.y * -1;
 			}
@@ -96,12 +127,14 @@
 			for(circle in circles)
 			{
 				circles[circle].update(1);
+				circles[circle].adjustSize();
 			}
 		}
 
 		this.createNewCircle = function(x,y){
 			var new_circle = new Circle(x,y,counter++);
 			circles.push(new_circle);
+			numOfCircles++;
 			// console.log('created a new circle!', new_circle);
 		}
 
@@ -115,7 +148,6 @@
 	document.onclick = function(e) {
 		playground.createNewCircle(e.x,e.y);
 	}
-
 	</script>
 
 </body>
