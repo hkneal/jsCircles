@@ -6,6 +6,7 @@
 			margin: 0;
 			padding: 0;
 			display: block;
+			background-image: url("space-1.jpg");
 		}
 		#svg{
 			width: 100%;
@@ -15,7 +16,34 @@
 </head>
 <body>
 
-	<svg id="svg" xmlns="http://www.w3.org/2000/svg"></svg>
+	<svg id="svg" xmlns="http://www.w3.org/2000/svg">
+		<defs>
+    <pattern id="imgpurple" x="0%" y="0%" height="100%" width="100%"
+             viewBox="0 0 512 512">
+      <image x="0%" y="0%" width="512" height="512" xlink:href="PurpleRain.png"></image>
+    </pattern>
+		<pattern id="imgblack" x="0%" y="0%" height="100%" width="100%"
+             viewBox="0 0 512 512">
+      <image x="0%" y="0%" width="512" height="512" xlink:href="Black.png"></image>
+    </pattern>
+		<pattern id="imgearth" x="0%" y="0%" height="100%" width="100%"
+             viewBox="0 0 512 512">
+      <image x="0%" y="0%" width="512" height="512" xlink:href="Earth.png"></image>
+    </pattern>
+		<pattern id="imgjup" x="0%" y="0%" height="100%" width="100%"
+             viewBox="0 0 512 512">
+      <image x="0%" y="0%" width="512" height="512" xlink:href="jupiter.png"></image>
+    </pattern>
+		<pattern id="imgmars" x="0%" y="0%" height="100%" width="100%"
+             viewBox="0 0 512 512">
+      <image x="0%" y="0%" width="512" height="512" xlink:href="mars.png"></image>
+    </pattern>
+		<pattern id="imgsat" x="0%" y="0%" height="100%" width="100%"
+             viewBox="0 0 512 512">
+      <image x="0%" y="0%" width="512" height="512" xlink:href="saturn2.png"></image>
+    </pattern>
+  </defs>
+	</svg>
 
 	<script>
 	var increase_r = 0;
@@ -39,9 +67,9 @@
 			}
 
 			//create a circle
-			var colorVaries = Math.ceil(randomNumberBetween(0,5)) - 1;
+			var colorVaries = Math.ceil(randomNumberBetween(0,6)) - 1;
 			this.info.r = Math.ceil(randomNumberBetween(2,35));
-			var styleArr = ["fill: black","fill: green","fill: blue","fill: red","fill: yellow"];
+			var styleArr = ["fill: url(#imgpurple)","fill: url(#imgblack)","fill: url(#imgearth)","fill: url(#imgsat)","fill: url(#imgmars)","fill: url(#imgjup)"];
 			// var sizeArr = [10, 5, 25, 50, 15];
 			var circle = makeSVG('circle',
 				{ 	cx: this.info.cx,
